@@ -34,3 +34,15 @@ Nonostante l'uso dei volumi Docker, è stato implementato uno script Bash person
 Lo script è schedulato tramite **Crontab** per l'esecuzione automatica e silente ogni notte alle 02:00, con reindirizzamento degli output per il monitoraggio:
 ```bash
 0 2 * * * /home/user/scripts/backup_db.sh >> /var/log/docker_backup.log 2>&1
+🚑 Disaster Recovery
+Il sistema è stato progettato per il ripristino rapido (Disaster Recovery). In caso di corruzione del database, è possibile ripristinare un dump compresso decomprimendolo "al volo" e inviandolo direttamente in input al container:
+gunzip -c /backup/postgres/db_backup_DATA.sql.gz | docker exec -i staging_db psql -U admin -d app_db
+
+📸 Evidenze Operative
+All'interno della documentazione PDF allegata e nella sezione file sono disponibili gli script sorgenti e gli screenshot dell'infrastruttura, che dimostrano:
+
+Il corretto avvio e la raggiungibilità dei container (Test HTTP Nginx e Query SQL su Postgres).
+
+L'avvenuta esecuzione dello script di backup.
+
+L'inserimento del job di automazione nel demone Cron.
